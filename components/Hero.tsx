@@ -114,7 +114,7 @@ export default function Hero() {
           className="flex flex-col items-center text-gray-500 hover:text-cyan transition-colors"
         >
           <span className="text-xs tracking-widest uppercase mb-2">Scroll</span>
-          <motion.div animate={{ y: [0, 8, 0] }} transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}>
+          <motion.div animate={{ y: [0, 8, 0] }} transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" as const }}>
             <ChevronDown size={16} />
           </motion.div>
         </a>

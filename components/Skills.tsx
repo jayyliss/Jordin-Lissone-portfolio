@@ -1,221 +1,163 @@
 "use client";
 
 import { motion } from "framer-motion";
-import {
-  Shield,
-  Lock,
-  BarChart3,
-  Cloud,
-  Home,
-  Award,
-  CheckCircle2,
-  Clock,
-} from "lucide-react";
-
-interface Certification {
-  name: string;
-  status: "earned" | "in-progress";
-  icon: typeof Award;
-}
-
-interface SkillCategory {
-  name: string;
-  icon: typeof Shield;
-  items: string[];
-}
-
-const certifications: Certification[] = [
-  {
-    name: "Microsoft Azure Fundamentals (AZ-900)",
-    status: "earned",
-    icon: Award,
-  },
-  {
-    name: "CompTIA Security+",
-    status: "in-progress",
-    icon: Award,
-  },
-  {
-    name: "CompTIA Network+",
-    status: "in-progress",
-    icon: Award,
-  },
-];
-
-const skillCategories: SkillCategory[] = [
-  {
-    name: "Cyber Risk & Compliance",
-    icon: Shield,
-    items: [
-      "Risk Assessment",
-      "Regulatory Compliance",
-      "GDPR / CCPA",
-      "Framework Design",
-    ],
-  },
-  {
-    name: "Data Privacy",
-    icon: Lock,
-    items: [
-      "Privacy Impact Assessment",
-      "Data Governance",
-      "Privacy-by-Design",
-      "Cross-Border Data",
-    ],
-  },
-  {
-    name: "Product Management",
-    icon: BarChart3,
-    items: [
-      "Product Strategy",
-      "Roadmap Planning",
-      "Stakeholder Management",
-      "KPI Definition",
-    ],
-  },
-  {
-    name: "Cloud & Technology",
-    icon: Cloud,
-    items: [
-      "Microsoft Azure",
-      "Cloud Security",
-      "Data Architecture",
-      "Systems Design",
-    ],
-  },
-  {
-    name: "Real Estate",
-    icon: Home,
-    items: [
-      "Licensed in New York",
-      "Licensed in Connecticut",
-      "Property Analysis",
-      "Client Advisory",
-    ],
-  },
-];
+import { CheckCircle2, Clock, ShieldCheck } from "lucide-react";
+import { SKILL_CATEGORIES, CERTIFICATIONS } from "@/lib/data";
 
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: {
-      staggerChildren: 0.08,
-    },
+    transition: { staggerChildren: 0.1 },
   },
 };
 
 const itemVariants = {
   hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" as const } },
 };
 
 export default function Skills() {
   return (
     <section id="skills" className="py-24 sm:py-32 relative">
-      {/* Background accent */}
-      <div className="absolute top-1/3 right-0 w-[400px] h-[400px] bg-blue-500/3 rounded-full blur-[150px]" />
+      <div className="section-divider mb-24" />
 
-      <div className="max-w-6xl mx-auto px-6 relative z-10">
+      {/* Background accent */}
+      <div className="absolute top-1/3 right-0 w-[400px] h-[400px] bg-secondary/[0.03] rounded-full blur-[150px]" />
+
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
+          viewport={{ once: true }}
           transition={{ duration: 0.6 }}
           className="mb-4"
         >
-          <span className="text-cyan text-sm font-medium tracking-widest uppercase">
-            Skills & Certifications
+          <span className="text-cyan text-sm font-semibold tracking-widest uppercase">
+            Expertise
           </span>
         </motion.div>
 
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
+          viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.1 }}
           className="text-3xl sm:text-4xl font-bold text-white mb-16 tracking-tight"
         >
-          Capabilities & credentials.
+          Skills & <span className="gradient-text">certifications.</span>
         </motion.h2>
+
+        {/* Skills Grid */}
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-50px" }}
+          className="grid md:grid-cols-2 gap-6 mb-16"
+        >
+          {SKILL_CATEGORIES.map((category) => (
+            <motion.div
+              key={category.id}
+              variants={itemVariants}
+              whileHover={{ scale: 1.01, y: -2 }}
+              className="glass-card gradient-border p-6 sm:p-8 group transition-all duration-300"
+            >
+              {/* Category Header */}
+              <div className="flex items-center gap-3 mb-6">
+                <div
+                  className="w-1.5 h-8 rounded-full"
+                  style={{ background: category.color }}
+                />
+                <h3 className="text-lg font-semibold text-white">
+                  {category.title}
+                </h3>
+              </div>
+
+              {/* Skill Tags */}
+              <div className="flex flex-wrap gap-2">
+                {category.skills.map((skill) => (
+                  <span
+                    key={skill}
+                    className="skill-tag px-3 py-1.5 rounded-lg text-sm font-medium cursor-default"
+                    style={{
+                      background: `${category.color}10`,
+                      color: category.color,
+                      border: `1px solid ${category.color}20`,
+                    }}
+                  >
+                    {skill}
+                  </span>
+                ))}
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
 
         {/* Certifications */}
         <motion.div
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          className="grid sm:grid-cols-3 gap-4 mb-16"
+          viewport={{ once: true, margin: "-50px" }}
         >
-          {certifications.map((cert) => (
-            <motion.div
-              key={cert.name}
-              variants={itemVariants}
-              whileHover={{ scale: 1.02, y: -4 }}
-              className="glass rounded-xl p-5 group hover:glow-cyan transition-all duration-300"
-            >
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 rounded-lg bg-cyan/10 flex items-center justify-center">
-                  <cert.icon size={20} className="text-cyan" />
-                </div>
-                {cert.status === "earned" ? (
-                  <CheckCircle2 size={16} className="text-green-400" />
-                ) : (
-                  <Clock size={16} className="text-yellow-400" />
-                )}
-              </div>
-              <h4 className="text-sm font-semibold text-white mb-1">
-                {cert.name}
-              </h4>
-              <span
-                className={`text-xs font-medium ${
-                  cert.status === "earned"
-                    ? "text-green-400/80"
-                    : "text-yellow-400/80"
-                }`}
-              >
-                {cert.status === "earned" ? "Certified" : "In Progress"}
-              </span>
-            </motion.div>
-          ))}
-        </motion.div>
+          <motion.h3
+            variants={itemVariants}
+            className="text-xl font-semibold text-white mb-8"
+          >
+            Professional Certifications
+          </motion.h3>
 
-        {/* Skill categories */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"
-        >
-          {skillCategories.map((category) => (
-            <motion.div
-              key={category.name}
-              variants={itemVariants}
-              whileHover={{ scale: 1.02, y: -4 }}
-              className="glass rounded-xl p-6 group hover:glow-cyan transition-all duration-300"
-            >
-              <div className="flex items-center gap-3 mb-5">
-                <category.icon
-                  size={20}
-                  className="text-cyan/60 group-hover:text-cyan transition-colors"
-                />
-                <h4 className="text-sm font-semibold text-white">
-                  {category.name}
+          <div className="grid sm:grid-cols-3 gap-4 max-w-4xl">
+            {CERTIFICATIONS.map((cert) => (
+              <motion.div
+                key={cert.id}
+                variants={itemVariants}
+                whileHover={{ scale: 1.02, y: -4 }}
+                className="glass-card gradient-border p-5 text-center group hover:bg-background-card/80 transition-all"
+              >
+                {/* Status Icon */}
+                <div className="flex justify-center mb-4">
+                  {cert.status === "earned" ? (
+                    <div className="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                      <ShieldCheck className="w-6 h-6 text-emerald-400" />
+                    </div>
+                  ) : (
+                    <div className="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                      <Clock className="w-6 h-6 text-amber-400" />
+                    </div>
+                  )}
+                </div>
+
+                {/* Cert Info */}
+                <h4 className="text-white font-semibold text-sm mb-1">
+                  {cert.name}
                 </h4>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {category.items.map((item) => (
-                  <span
-                    key={item}
-                    className="text-xs px-3 py-1.5 rounded-full bg-white/5 text-gray-400 border border-white/5 group-hover:border-cyan/10 group-hover:text-gray-300 transition-all duration-300"
-                  >
-                    {item}
-                  </span>
-                ))}
-              </div>
-            </motion.div>
-          ))}
+                <p className="text-gray-500 text-xs mb-3 font-mono">
+                  {cert.code}
+                </p>
+
+                {/* Status Badge */}
+                <span
+                  className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium ${
+                    cert.status === "earned"
+                      ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
+                      : "bg-amber-500/10 text-amber-400 border border-amber-500/20"
+                  }`}
+                >
+                  {cert.status === "earned" ? (
+                    <CheckCircle2 className="w-3 h-3" />
+                  ) : (
+                    <Clock className="w-3 h-3" />
+                  )}
+                  {cert.status === "earned" ? "Earned" : "In Progress"}
+                </span>
+
+                <p className="text-gray-600 text-xs mt-2">{cert.issuer}</p>
+              </motion.div>
+            ))}
+          </div>
         </motion.div>
       </div>
     </section>

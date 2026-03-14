@@ -1,137 +1,147 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Briefcase } from "lucide-react";
+import { EXPERIENCES } from "@/lib/data";
 
-interface ExperienceItem {
-  company: string;
-  role: string;
-  period: string;
-  type: string;
-  accentColor: string;
-  accentBg: string;
-  bullets: string[];
-}
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.2 },
+  },
+};
 
-const experiences: ExperienceItem[] = [
-  {
-    company: "PwC",
-    role: "Cyber Risk & Regulatory Associate, Data Risk & Privacy",
-    period: "2022 - Present",
-    type: "Big 4 Consulting",
-    accentColor: "text-orange-400",
-    accentBg: "bg-orange-400/10 border-orange-400/20",
-    bullets: [
-      "Advise Fortune 500 clients on data risk assessments, privacy regulations, and regulatory compliance across multiple jurisdictions",
-      "Lead data privacy impact assessments and develop comprehensive compliance frameworks aligned with GDPR, CCPA, and emerging privacy laws",
-      "Design and implement cyber risk management strategies that transform regulatory requirements into competitive advantages",
-      "Collaborate with cross-functional teams to integrate privacy-by-design principles into enterprise data architectures",
-    ],
-  },
-  {
-    company: "Toyota Connected North America",
-    role: "Senior Product Manager",
-    period: "2020 - 2022",
-    type: "Contractor to Full-Time",
-    accentColor: "text-red-400",
-    accentBg: "bg-red-400/10 border-red-400/20",
-    bullets: [
-      "Led product strategy and roadmap for connected vehicle data platforms serving millions of Toyota and Lexus owners",
-      "Drove cross-functional collaboration between engineering, design, and business stakeholders to deliver data-driven product features",
-      "Managed end-to-end product lifecycle from discovery through launch, transitioning from contractor to full-time based on impact",
-      "Defined KPIs and success metrics for connected services, leveraging analytics to inform product decisions and optimize user experience",
-    ],
-  },
-];
+const cardVariants = {
+  hidden: { opacity: 0, y: 40 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: "easeOut" as const } },
+};
 
 export default function Experience() {
   return (
     <section id="experience" className="py-24 sm:py-32 relative">
-      {/* Subtle background accent */}
-      <div className="absolute top-1/2 left-0 w-[400px] h-[400px] bg-cyan/3 rounded-full blur-[150px] -translate-y-1/2" />
+      {/* Section Divider */}
+      <div className="section-divider mb-24" />
 
-      <div className="max-w-6xl mx-auto px-6 relative z-10">
+      {/* Background accent */}
+      <div className="absolute top-1/2 left-0 w-[400px] h-[400px] bg-cyan/[0.03] rounded-full blur-[150px] -translate-y-1/2" />
+
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
+          viewport={{ once: true }}
           transition={{ duration: 0.6 }}
           className="mb-4"
         >
-          <span className="text-cyan text-sm font-medium tracking-widest uppercase">
-            Experience
+          <span className="text-cyan text-sm font-semibold tracking-widest uppercase">
+            Career
           </span>
         </motion.div>
 
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
+          viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.1 }}
           className="text-3xl sm:text-4xl font-bold text-white mb-16 tracking-tight"
         >
-          Professional journey.
+          Professional <span className="gradient-text">experience.</span>
         </motion.h2>
 
-        <div className="relative">
-          {/* Timeline line */}
-          <div className="absolute left-8 top-0 bottom-0 w-px bg-gradient-to-b from-cyan/20 via-cyan/10 to-transparent hidden md:block" />
+        {/* Timeline */}
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          className="relative"
+        >
+          {/* Vertical Line */}
+          <div className="timeline-line" />
 
-          <div className="space-y-12">
-            {experiences.map((exp, i) => (
-              <motion.div
-                key={exp.company}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.6, delay: i * 0.15 }}
-                className="relative md:pl-20"
-              >
-                {/* Timeline dot */}
-                <div className="absolute left-6 top-6 w-5 h-5 rounded-full border-2 border-cyan/40 bg-navy-900 hidden md:flex items-center justify-center">
-                  <div className="w-2 h-2 rounded-full bg-cyan/60" />
+          {EXPERIENCES.map((exp, index) => (
+            <motion.div
+              key={exp.id}
+              variants={cardVariants}
+              className={`relative mb-12 last:mb-0 md:flex md:items-start ${
+                index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
+              }`}
+            >
+              {/* Timeline Dot */}
+              <div className="absolute left-[14px] md:left-1/2 md:-translate-x-1/2 z-10">
+                <div
+                  className="w-[22px] h-[22px] rounded-full border-2 flex items-center justify-center"
+                  style={{
+                    borderColor: exp.color,
+                    background: `${exp.color}15`,
+                  }}
+                >
+                  <div
+                    className="w-2.5 h-2.5 rounded-full"
+                    style={{ background: exp.color }}
+                  />
                 </div>
+              </div>
 
+              {/* Card */}
+              <div
+                className={`ml-14 md:ml-0 md:w-[calc(50%-40px)] ${
+                  index % 2 === 0 ? "md:mr-auto md:pr-8" : "md:ml-auto md:pl-8"
+                }`}
+              >
                 <motion.div
                   whileHover={{ scale: 1.01, y: -2 }}
-                  className="glass rounded-2xl p-6 sm:p-8 hover:glow-cyan transition-all duration-300"
+                  className="glass-card gradient-border p-6 sm:p-8 group hover:bg-background-card/80 transition-all"
                 >
-                  <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-4">
-                    <div>
-                      <div className="flex items-center gap-3 mb-2">
-                        <Briefcase size={18} className={exp.accentColor} />
-                        <h3 className="text-xl font-bold text-white">
-                          {exp.company}
-                        </h3>
-                        <span
-                          className={`text-xs px-2.5 py-1 rounded-full border ${exp.accentBg} ${exp.accentColor} font-medium`}
-                        >
-                          {exp.type}
-                        </span>
-                      </div>
-                      <p className="text-gray-300 font-medium">{exp.role}</p>
+                  {/* Company Header */}
+                  <div className="flex items-start gap-4 mb-4">
+                    <div
+                      className="flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center text-lg font-bold transition-transform group-hover:scale-110"
+                      style={{
+                        background: `${exp.color}15`,
+                        color: exp.color,
+                        border: `1px solid ${exp.color}30`,
+                      }}
+                    >
+                      {exp.icon}
                     </div>
-                    <span className="text-sm text-gray-500 font-medium whitespace-nowrap">
-                      {exp.period}
-                    </span>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-white font-semibold text-lg leading-tight">
+                        {exp.company}
+                      </h3>
+                      <p className="text-gray-400 text-sm mt-0.5">{exp.role}</p>
+                      <p className="text-gray-600 text-xs mt-1 font-medium tracking-wide">
+                        {exp.period}
+                      </p>
+                    </div>
                   </div>
 
-                  <ul className="space-y-3">
-                    {exp.bullets.map((bullet, j) => (
+                  {/* Description */}
+                  <p className="text-gray-400 text-sm leading-relaxed mb-4">
+                    {exp.description}
+                  </p>
+
+                  {/* Highlights */}
+                  <ul className="space-y-2">
+                    {exp.highlights.map((highlight, hIndex) => (
                       <li
-                        key={j}
-                        className="flex gap-3 text-sm text-gray-400 leading-relaxed"
+                        key={hIndex}
+                        className="flex items-start gap-2 text-sm text-gray-500 group-hover:text-gray-400 transition-colors"
                       >
-                        <span className="mt-2 w-1 h-1 rounded-full bg-cyan/40 shrink-0" />
-                        {bullet}
+                        <span
+                          className="w-1 h-1 rounded-full mt-2 flex-shrink-0"
+                          style={{ background: exp.color }}
+                        />
+                        {highlight}
                       </li>
                     ))}
                   </ul>
                 </motion.div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
       </div>
     </section>
   );
